@@ -69,6 +69,25 @@
       transform: rotate(90deg);
       transition: transform 0.05s cubic-bezier(0.1, 2.7, 0.55, 0.62);
     }
+    .hand::before{
+        content: "";
+        position: absolute;
+        left: 0;
+        width: 6px;
+        height: 15px;
+        transform: rotate(-45deg);
+        background-color: black;
+    }
+
+    .hand::after{
+        content: "";
+        position: absolute;
+        left: 0;
+        width: 6px;
+        height: 15px;
+        transform: translateY(-8px) rotate(45deg);
+        background-color: black;
+    }
 
     .pin{
         position: absolute;
@@ -79,7 +98,6 @@
         border-radius: 50%;
         background-color: #000;
         transform: translate(-7px,-2px);
-
     }
 
   </style>
