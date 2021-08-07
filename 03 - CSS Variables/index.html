@@ -1,0 +1,126 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Scoped CSS Variables and JS</title>
+</head>
+<body>
+  <h2>Update CSS Variables with <span class='hl'>JS</span></h2>
+
+  <div class="controls">
+    <label for="spacing">Spacing:</label>
+    <input id="spacing" type="range" name="spacing" min="10" max="200" value="10" data-sizing="px">
+
+    <label for="blur">Blur:</label>
+    <input id="blur" type="range" name="blur" min="0" max="25" value="10" data-sizing="px">
+
+    <label for="base">Base Color</label>
+    <input id="base" type="color" name="base" value="#ffc600">
+  </div>
+
+  <img src="https://source.unsplash.com/7bwQXzbF6KE/800x500">
+
+  <style>
+
+    /*
+      misc styles, nothing to do with CSS variables
+    */
+
+
+    
+    /* We generally set our variable in :root, the highest level in HTML */
+
+    :root{
+      --base: #ffc600;
+      --spacing: 10px;
+      --blur: 10px;
+    }
+
+    img{
+      padding: var(--spacing);
+      background: var(--base);
+      filter: blur(var(--blur));
+    }
+
+    .hl{
+        color: var(--base);
+    }
+
+    body {
+      text-align: center;
+      background: #193549;
+      color: white;
+      font-family: 'helvetica neue', sans-serif;
+      font-weight: 100;
+      font-size: 50px;
+    }
+
+    .controls {
+      margin-bottom: 50px;
+    }
+
+    input {
+      width: 100px;
+    }
+  </style>
+
+  <script>
+
+      const inputs = document.querySelectorAll("input");
+
+      function handleChange(){
+
+           //console.log(this.value);
+          //Here this is equal to element that 
+          //triggers this handleChange() method
+
+          //Dataset of the triggered element is an OBJECT
+          //of all data- attributes defined for that element.
+          //console.log(this.dataset);
+
+          const suffix = this.dataset.sizing || '';
+          //sizing is for spacing and blue with defined data-sizing = px
+          //This will be used to set value of spacing and blur in pixels.
+          //For type "color" with data-sizing not defined, we assign it as "",
+          //So as to prevent assigning suffix to UNDEFINED.
+          
+          //Selecting entire document, or :root.
+          document.documentElement.style.setProperty(`--${this.name}`, this.value + suffix);
+      }
+
+    inputs.forEach(input => {
+
+
+        //To Detect Change when mouse is released
+        // input.addEventListener('change', handleChange);
+
+
+        //METHOD-1: To continously detect changes when value is changed while dragging mouse.
+        // I prefer this as it takes input only 
+        // when we move the range slider.
+        input.addEventListener('input', handleChange);
+
+
+        //METHOD-2: Set some flag to check if range is clicked,
+        //Then detect value using mousemove eventListener.
+        //
+
+        //METHOD-2(i):
+        // input.addEventListener("click",()=>{
+        // input.addEventListener('mousemove', handleChange);
+        // })
+
+        //METHOD-2(ii):
+        // input.addEventListener('change', handleChange);
+        // input.addEventListener('mousemove', handleChange);
+        //Detect value when either value is changed(when the mouse is released)
+        // and when the mousemove event occur
+
+    });
+      
+
+  </script>
+
+</body>
+</html>
