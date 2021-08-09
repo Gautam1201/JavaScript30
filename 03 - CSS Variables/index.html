@@ -8,6 +8,8 @@
 <body>
   <h2>Update CSS Variables with <span class='hl'>JS</span></h2>
 
+  <div class="modes" id = "modes"></div>
+
   <div class="controls">
     <label for="spacing">Spacing:</label>
     <input id="spacing" type="range" name="spacing" min="10" max="200" value="10" data-sizing="px">
@@ -35,6 +37,15 @@
       --base: #ffc600;
       --spacing: 10px;
       --blur: 10px;
+
+      --light: #193549;
+      --dark: #000;
+
+      --light-icon: grey,black;
+      --dark-icon: orange,yellow;
+      
+      --bgcolor-icon: var(--light-icon);
+      --bgcolor: var(--light);
     }
 
     img{
@@ -49,11 +60,46 @@
 
     body {
       text-align: center;
-      background: #193549;
+      background: var(--bgcolor);
       color: white;
       font-family: 'helvetica neue', sans-serif;
       font-weight: 100;
       font-size: 50px;
+    }
+
+    .modes{
+      position: absolute;
+      height: 40px;
+      width: 40px;
+      top: 10px;
+      right: 10px;
+      border-radius: 50%;
+      background: radial-gradient(var(--bgcolor-icon));
+      cursor: pointer;
+    }
+
+    .modes::before{
+      content: '';
+      position: absolute;
+      height: 40px;
+      width: 40px;
+      top: .5px;
+      right: .5px;
+      border-radius: 20%;
+      background: url("./light-and-dark.png") no-repeat;
+      background-size: 44px 44px;
+      background-color: #5aa6db;
+      background-position-x: -2px;
+      background-position-y: -2px;
+      z-index: 1;
+    }
+
+    .modes:hover::before, .modes:hover{
+      opacity: 0.5;
+    }
+
+    .hide::before{
+      display: none;
     }
 
     .controls {
@@ -68,6 +114,10 @@
   <script>
 
       const inputs = document.querySelectorAll("input");
+
+      const toggle = document.getElementById("modes");
+      const lightBg = getComputedStyle(document.documentElement).getPropertyValue("--light");
+      const darkBg = getComputedStyle(document.documentElement).getPropertyValue("--dark");
 
       function handleChange(){
 
@@ -118,8 +168,20 @@
         // and when the mousemove event occur
 
     });
-      
 
+    toggle.addEventListener("click", () => {
+
+      toggle.classList.add("hide");
+
+      if(getComputedStyle(document.documentElement).getPropertyValue("--bgcolor") === lightBg){
+        document.documentElement.style.setProperty('--bgcolor-icon', "var(--dark-icon)");
+        document.documentElement.style.setProperty('--bgcolor', "var(--dark)");
+      }else{
+        document.documentElement.style.setProperty('--bgcolor-icon', "var(--light-icon)");
+        document.documentElement.style.setProperty('--bgcolor', "var(--light)");
+      }
+    });
+      
   </script>
 
 </body>
